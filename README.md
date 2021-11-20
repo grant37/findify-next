@@ -1,34 +1,52 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Findify / Next.js Example
 
-## Getting Started
+- older versions of `@findify/react-connect` (at least pre-0.7.x) shipped with Node.js-compatible files in `lib`
+- seems that `@findify/react-connect@latest` does not - only ES modules
+- this prevents the package from working out of the box in a Next.js app. see: https://github.com/vercel/next.js/issues/9890
 
-First, run the development server:
+To reproduce the issue:
 
-```bash
-npm run dev
-# or
-yarn dev
+- clone this project
+
+```sh
+npm i
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+expected result: project builds
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+actual result:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+```sh
+> build
+> next build
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+info  - Checking validity of types
+info  - Creating an optimized production build
+info  - Compiled successfully
 
-## Learn More
+> Build error occurred
+~/findify-next/node_modules/@findify/react-connect/lib/index.js:1
+export { createProvider } from './provider/createProvider';
+^^^^^^
 
-To learn more about Next.js, take a look at the following resources:
+SyntaxError: Unexpected token 'export'
+    at wrapSafe (internal/modules/cjs/loader.js:979:16)
+    at Module._compile (internal/modules/cjs/loader.js:1027:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.751 (/Users/gsisson/open-source/findify-next/.next/server/pages/index.js:49:39)
+    at __webpack_require__ (/Users/gsisson/open-source/findify-next/.next/server/webpack-runtime.js:25:42)
+    at __webpack_exec__ (/Users/gsisson/open-source/findify-next/.next/server/pages/index.js:245:39) {
+  type: 'SyntaxError'
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You can see the same error in the browser with
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```sh
+npm run dev
+```
